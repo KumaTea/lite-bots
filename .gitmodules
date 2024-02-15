@@ -1,0 +1,3 @@
+[submodule "KumaLiteBot"]
+	path = KumaLiteBot
+	url = https://github.com/KumaTea/KumaLiteBot
