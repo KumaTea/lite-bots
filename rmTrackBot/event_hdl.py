@@ -1,6 +1,6 @@
 import json
 from telegram import Update
-from core import bot, inline_query, start, logging
+from core import bot, inline_query, WELCOME, logging
 
 
 def event_handler(event, context):
@@ -19,7 +19,7 @@ def event_handler(event, context):
         elif update.message:
             msg = update.message
             if msg.chat.id > 0:
-                res['body'] = str(msg.reply_text(start()))
+                res['body'] = str(msg.reply_text(WELCOME, parse_mode='Markdown', disable_web_page_preview=True))
         else:
             logging.info('Undefined update type, ignoring...')
     except Exception as e:

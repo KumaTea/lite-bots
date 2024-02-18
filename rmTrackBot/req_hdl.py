@@ -1,6 +1,6 @@
 from telegram import Update
 from flask import request as FlaskRequest
-from core import bot, inline_query, start, logging
+from core import bot, inline_query, WELCOME, logging
 
 
 def req_handler(request: FlaskRequest) -> str:
@@ -14,7 +14,7 @@ def req_handler(request: FlaskRequest) -> str:
         elif update.message:
             msg = update.message
             if msg.chat.id > 0:
-                res = msg.reply_text(start())
+                res = msg.reply_text(WELCOME, parse_mode='Markdown', disable_web_page_preview=True)
         else:
             logging.info('Undefined update type, ignoring...')
     except Exception as e:
