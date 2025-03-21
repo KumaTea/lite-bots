@@ -27,6 +27,14 @@ WELCOME = (
     ')'
 )
 
+URL_REDIR = {
+    'x.com': 'twitter.com'
+}
+
+KEEP_PARA = {
+    'bilibili.com': ['avid', 'bvid']
+}
+
 
 @dataclass
 class WebResult:
@@ -106,7 +114,18 @@ def decode_url(url: str) -> list[WebResult]:
         return results
 
     parse_new_url = urlparse(new_url)
+    if parse_new_url.netloc in URL_REDIR:
+        parse_new_url = parse_new_url._replace(netloc=URL_REDIR[parse_new_url.netloc])
     clean_new_url = f'{parse_new_url.scheme}://{parse_new_url.netloc}{parse_new_url.path}'
+
+    for host in KEEP_PARA:
+        if parse_new_url.netloc.endswith(host):
+            from urllib.parse import parse_qs, urlencode
+            query_params = parse_qs(parse_new_url.query)
+            filtered_params = {k: v for k, v in query_params.items() if k in KEEP_PARA[host]}
+            if filtered_params:
+                clean_new_url += "?" + urlencode(filtered_params, doseq=True)
+            break
 
     if clean_url != clean_new_url:
         # convert from short link
